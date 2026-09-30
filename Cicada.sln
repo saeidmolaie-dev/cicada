@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cicada.Sandbox", "src\Cicada.Sandbox\Cicada.Sandbox.csproj", "{9FFAA21B-BDA3-4BF8-89FC-C64A7DFEB57C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cicada.Numerics", "src\Cicada.Numerics\Cicada.Numerics.csproj", "{8AA544DB-37D3-4D59-AEC7-CE7D4295B7AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cicada.Shared", "src\Cicada.Shared\Cicada.Shared.csproj", "{31AAE954-AA32-4856-B04E-484A956545D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{9FFAA21B-BDA3-4BF8-89FC-C64A7DFEB57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FFAA21B-BDA3-4BF8-89FC-C64A7DFEB57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FFAA21B-BDA3-4BF8-89FC-C64A7DFEB57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA544DB-37D3-4D59-AEC7-CE7D4295B7AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA544DB-37D3-4D59-AEC7-CE7D4295B7AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA544DB-37D3-4D59-AEC7-CE7D4295B7AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA544DB-37D3-4D59-AEC7-CE7D4295B7AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31AAE954-AA32-4856-B04E-484A956545D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31AAE954-AA32-4856-B04E-484A956545D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31AAE954-AA32-4856-B04E-484A956545D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31AAE954-AA32-4856-B04E-484A956545D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
