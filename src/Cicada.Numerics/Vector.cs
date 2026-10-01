@@ -44,6 +44,15 @@ public sealed class Vector
 	public static Vector operator -(Vector left, Vector right)
 		=> Apply(left, right, (a, b) => a - b);
 
+	public static Vector operator *(Vector vector, float scalar)
+		=> Apply(vector, scalar, ScalarOperation.Multiplication);
+
+	public static Vector operator *(float scalar, Vector vector)
+		=> Apply(vector, scalar, ScalarOperation.Multiplication);
+
+	public static Vector operator /(Vector vector, float scalar)
+		=> Apply(vector, scalar, ScalarOperation.Division);
+
 	private static Vector Apply(
 		Vector left,
 		Vector right,
@@ -63,6 +72,29 @@ public sealed class Vector
 		return new Vector(result);
 	}
 
+	private static Vector Apply(Vector vector, float scalar, ScalarOperation scalarOperation)
+	{
+		Guard.ThrowIfNull(vector, nameof(vector));
+		Guard.ThrowIfZeroOrNegative(scalar, nameof(scalar));
+
+		Guard.ThrowIfTrue(
+			scalarOperation == ScalarOperation.Division && scalar == 0,
+			"Cannot divide a vector by zero");
+
+		Func<float, float> operation =
+			scalarOperation == ScalarOperation.Division
+				? component => component * scalar
+				: component => component / scalar;
+
+		var result =
+			new float[vector.Dimensions];
+
+		for (var i = 0; i < result.Length; i++)
+			result[i] = operation(vector[i]);
+
+		return new Vector(result);
+	}
+
 	private static void EnsureSameDimensions(Vector left, Vector right)
 	{
 		Guard.ThrowIfTrue(
@@ -74,5 +106,11 @@ public sealed class Vector
 	{
 		Guard.ThrowIfOutOfRange(
 			index, 0, Dimensions - 1, nameof(index));
+	}
+
+	private enum ScalarOperation
+	{
+		Multiplication,
+		Division
 	}
 }
