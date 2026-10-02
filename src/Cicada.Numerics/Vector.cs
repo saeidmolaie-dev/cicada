@@ -24,6 +24,24 @@ public sealed class Vector
 
 	public int Dimensions => _components.Length;
 
+	public float SquaredLength => Dot(this);
+
+	public float Length => MathF.Sqrt(SquaredLength);
+
+	public float Dot(Vector vector)
+	{
+		Guard.ThrowIfNull(vector, nameof(vector));
+
+		EnsureSameDimensions(this, vector);
+
+		var dotProduct = 0f;
+
+		for (var i = 0; i < Dimensions; i++)
+			dotProduct += _components[i] * vector[i];
+
+		return dotProduct;
+	}
+
 	public float this[int index]
 	{
 		get
