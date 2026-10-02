@@ -42,6 +42,16 @@ public sealed class Vector
 		return dotProduct;
 	}
 
+	public Vector Normalize()
+	{
+		var length = Length;
+
+		Guard.ThrowIfTrue(
+			length == 0f, "Cannot normalize a zero-length vector");
+
+		return this / length;
+	}
+
 	public float this[int index]
 	{
 		get
@@ -93,10 +103,8 @@ public sealed class Vector
 	private static Vector Apply(Vector vector, float scalar, ScalarOperation scalarOperation)
 	{
 		Guard.ThrowIfNull(vector, nameof(vector));
-		Guard.ThrowIfZeroOrNegative(scalar, nameof(scalar));
-
 		Guard.ThrowIfTrue(
-			scalarOperation == ScalarOperation.Division && scalar == 0,
+			scalarOperation == ScalarOperation.Division && scalar == 0f,
 			"Cannot divide a vector by zero");
 
 		Func<float, float> operation =
