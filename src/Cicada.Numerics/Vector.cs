@@ -24,22 +24,63 @@ public sealed class Vector
 
 	public int Dimensions => _components.Length;
 
-	public float SquaredLength => Dot(this);
-
 	public float Length => MathF.Sqrt(SquaredLength);
 
-	public float Dot(Vector vector)
-	{
-		Guard.ThrowIfNull(vector, nameof(vector));
+	public float SquaredLength => Dot(this);
 
-		EnsureSameDimensions(this, vector);
+	public float Distance(Vector other)
+		=> MathF.Sqrt(SquaredDistance(other));
+
+	public float SquaredDistance(Vector other)
+	{
+		Guard.ThrowIfNull(other, nameof(other));
+
+		EnsureSameDimensions(this, other);
+
+		var sum = 0f;
+
+		for (var i = 0; i < Dimensions; i++)
+		{
+			var difference =
+				_components[i] - other[i];
+
+			sum += difference * difference;
+		}
+
+		return sum;
+	}
+
+	public float Dot(Vector other)
+	{
+		Guard.ThrowIfNull(other, nameof(other));
+
+		EnsureSameDimensions(this, other);
 
 		var dotProduct = 0f;
 
 		for (var i = 0; i < Dimensions; i++)
-			dotProduct += _components[i] * vector[i];
+			dotProduct += _components[i] * other[i];
 
 		return dotProduct;
+	}
+
+	public float CosineSimilarity(Vector other)
+	{
+		Guard.ThrowIfNull(other, nameof(other));
+
+		EnsureSameDimensions(this, other);
+
+		var denominator =
+			MathF.Sqrt(SquaredLength * other.SquaredLength);
+
+		Guard.ThrowIfTrue(
+			denominator == 0f,
+			"Cannot compute cosine similarity with a zero-length vector");
+
+		var similarity = Dot(other) / denominator;
+
+		return Math.Clamp(
+			similarity, min: -1f, max: 1f);
 	}
 
 	public Vector Normalize()
@@ -72,14 +113,14 @@ public sealed class Vector
 	public static Vector operator -(Vector left, Vector right)
 		=> Apply(left, right, (a, b) => a - b);
 
-	public static Vector operator *(Vector vector, float scalar)
-		=> Apply(vector, scalar, ScalarOperation.Multiplication);
+	public static Vector operator *(Vector other, float scalar)
+		=> Apply(other, scalar, ScalarOperation.Multiplication);
 
-	public static Vector operator *(float scalar, Vector vector)
-		=> Apply(vector, scalar, ScalarOperation.Multiplication);
+	public static Vector operator *(float scalar, Vector other)
+		=> Apply(other, scalar, ScalarOperation.Multiplication);
 
-	public static Vector operator /(Vector vector, float scalar)
-		=> Apply(vector, scalar, ScalarOperation.Division);
+	public static Vector operator /(Vector other, float scalar)
+		=> Apply(other, scalar, ScalarOperation.Division);
 
 	private static Vector Apply(
 		Vector left,
@@ -100,23 +141,23 @@ public sealed class Vector
 		return new Vector(result);
 	}
 
-	private static Vector Apply(Vector vector, float scalar, ScalarOperation scalarOperation)
+	private static Vector Apply(Vector other, float scalar, ScalarOperation scalarOperation)
 	{
-		Guard.ThrowIfNull(vector, nameof(vector));
+		Guard.ThrowIfNull(other, nameof(other));
 		Guard.ThrowIfTrue(
 			scalarOperation == ScalarOperation.Division && scalar == 0f,
 			"Cannot divide a vector by zero");
 
 		Func<float, float> operation =
-			scalarOperation == ScalarOperation.Division
+			scalarOperation == ScalarOperation.Multiplication
 				? component => component * scalar
 				: component => component / scalar;
 
 		var result =
-			new float[vector.Dimensions];
+			new float[other.Dimensions];
 
 		for (var i = 0; i < result.Length; i++)
-			result[i] = operation(vector[i]);
+			result[i] = operation(other[i]);
 
 		return new Vector(result);
 	}
